@@ -90,4 +90,10 @@ mod tests {
         assert!((Bra::up() * Ket::down()).norm() == 0.0);
         assert!((Bra::left() * Ket::right()).norm() == 0.0);
     }
+
+    #[test]
+    fn prob() {
+        assert!((Bra::up() * Ket::left()).norm().powi(2) - 0.5 < 0.00000000001);
+        assert!((Bra::down() * Ket::right()).norm().powi(2) - 0.5 < 0.00000000001);
+    }
 }
