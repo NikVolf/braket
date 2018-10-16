@@ -5,3 +5,4 @@ authors = ["NikVolf <nikvolf@gmail.com>"]
 
 [dependencies]
 num-complex = "*"
+nalgebra = "*"
