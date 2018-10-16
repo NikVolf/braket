@@ -101,7 +101,9 @@ impl<D: DimName> Mul<Ket<D>> for Bra<D>
     type Output = Complex;
 
     fn mul(self, other: Ket<D>) -> Self::Output {
-        unsafe { *(self.0 * other.0).get_unchecked(0, 0) }
+        let mut m = self.0;
+        for f in m.iter_mut() { *f = f.conj(); }
+        unsafe { *(m * other.0).get_unchecked(0, 0) }
     }
 }
 
@@ -111,7 +113,9 @@ impl<D: DimName> Mul<Bra<D>> for Ket<D>
     type Output = MatrixMN<Complex, D, D>;
 
     fn mul(self, other: Bra<D>) -> Self::Output {
-        self.0 * other.0
+        let mut m = other.0;
+        for f in m.iter_mut() { *f = f.conj(); }
+        self.0 * m
     }
 }
 
