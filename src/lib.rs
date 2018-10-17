@@ -2,7 +2,7 @@ extern crate num_complex;
 extern crate nalgebra;
 extern crate typenum;
 
-use std::ops::Mul;
+use std::ops::{Mul, Add};
 use num_complex::Complex64 as Complex;
 use nalgebra::{DefaultAllocator, MatrixMN, U1, VectorN, RowVector2, RowVectorN, Vector2, DimName, U2};
 use nalgebra::allocator::Allocator;
@@ -116,6 +116,26 @@ impl<D: DimName> Mul<Bra<D>> for Ket<D>
         let mut m = other.0;
         for f in m.iter_mut() { *f = f.conj(); }
         self.0 * m
+    }
+}
+
+impl<D: DimName> Add for Ket<D>
+    where DefaultAllocator: Allocator<Complex, D>
+{
+    type Output = Self;
+
+    fn add(self, other: Ket<D>) -> Self::Output {
+        Ket(self.0 + other.0)
+    }
+}
+
+impl<D: DimName> Add for Bra<D>
+    where DefaultAllocator: Allocator<Complex, U1, D>
+{
+    type Output = Self;
+
+    fn add(self, other: Bra<D>) -> Self::Output {
+        Bra(self.0 + other.0)
     }
 }
 
