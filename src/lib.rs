@@ -139,8 +139,25 @@ impl<D: DimName> Add for Bra<D>
     }
 }
 
+impl<D: DimName> From<Ket<D>> for Bra<D>
+    where DefaultAllocator: Allocator<Complex, D> + Allocator<Complex, D, D> + Allocator<Complex, U1, D>
+{
+    fn from(v: Ket<D>) -> Self {
+        Bra(v.0.transpose())
+    }
+}
+
+impl<D: DimName> From<Bra<D>> for Ket<D>
+    where DefaultAllocator: Allocator<Complex, D> + Allocator<Complex, D, D> + Allocator<Complex, U1, D>
+{
+    fn from(v: Bra<D>) -> Self {
+        Ket(v.0.transpose())
+    }
+}
+
 pub type Bra2 = Bra<U2>;
 pub type Ket2 = Ket<U2>;
+
 
 #[cfg(test)]
 mod tests {
