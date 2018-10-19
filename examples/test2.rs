@@ -13,8 +13,9 @@ fn main() {
         (Bra2::up() * (Ket2::left() * Bra2::left()) * Ket2::up()).norm().powi(2)
     );
 
-    // this is probability of observing spin up again after it passed through left-right analyzer
+    // this wave function of spin originally been up after it passed through left-right analyzer
     // but was not observed (was in super position of left and right)
+    // should be same as Ket2::up() = [1, 0]
 
     println!(
         "(>l|<l + >r|<r) u> = {}",
