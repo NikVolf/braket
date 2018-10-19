@@ -157,6 +157,17 @@ impl<D: DimName> Mul<Bra<D>> for Ket<D>
     }
 }
 
+/// Only bra can be multiplied my square matrix
+impl<D: DimName> Mul<MatrixMN<Complex, D, D>> for Bra<D>
+    where DefaultAllocator: Allocator<Complex, D, D> + Allocator<Complex, U1, D>
+{
+    type Output = Self;
+
+    fn mul(self, other: MatrixMN<Complex, D, D>) -> Self::Output {
+        Bra(self.0 * other)
+    }
+}
+
 impl<D: DimName> Add for Ket<D>
     where DefaultAllocator: Allocator<Complex, D>
 {
