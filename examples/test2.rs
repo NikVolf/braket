@@ -4,7 +4,7 @@ use brakets::{Bra2, Ket2};
 
 fn main() {
 
-    // this is probability of observing spin up again after it passed through left-right analizer
+    // this is probability of observing spin up again after it passed through left-right analyzer
     // and was originally (up)!
     // should be 1/4
 
@@ -12,4 +12,12 @@ fn main() {
         "<u|l>|<l|u> = {}",
         (Bra2::up() * (Ket2::left() * Bra2::left()) * Ket2::up()).norm().powi(2)
     );
+
+    // this is probability of observing spin up again after it passed through left-right analyzer
+    // but was not observed (was in super position of left and right)
+
+    println!(
+        "(>l|<l + >r|<r) u> = {}",
+        (Ket2::left() * Bra2::left() + Ket2::right() * Bra2::right()) * Ket2::up()
+    )
 }

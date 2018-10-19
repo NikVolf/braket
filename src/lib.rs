@@ -15,6 +15,10 @@ pub struct Bra<D: DimName>(RowVectorN<Complex, D>)
 pub struct Ket<D: DimName>(VectorN<Complex, D>)
     where DefaultAllocator: Allocator<Complex, D>;
 
+#[derive(Clone)]
+pub struct Outer<D: DimName>(MatrixMN<Complex, D, D>)
+    where DefaultAllocator: Allocator<Complex, D, D>;
+
 pub const SQRT_2_INVERSE: f64 = 0.70710678118;
 
 impl<D: DimName> Bra<D>
@@ -148,23 +152,23 @@ impl<D: DimName> Mul<Ket<D>> for Bra<D>
 impl<D: DimName> Mul<Bra<D>> for Ket<D>
     where DefaultAllocator: Allocator<Complex, D> + Allocator<Complex, D, D> + Allocator<Complex, U1, D>
 {
-    type Output = MatrixMN<Complex, D, D>;
+    type Output = Outer<D>;
 
     fn mul(self, other: Bra<D>) -> Self::Output {
         let mut m = other.0;
         for f in m.iter_mut() { *f = f.conj(); }
-        self.0 * m
+        Outer(self.0 * m)
     }
 }
 
 /// Only bra can be multiplied my square matrix
-impl<D: DimName> Mul<MatrixMN<Complex, D, D>> for Bra<D>
+impl<D: DimName> Mul<Outer<D>> for Bra<D>
     where DefaultAllocator: Allocator<Complex, D, D> + Allocator<Complex, U1, D>
 {
     type Output = Self;
 
-    fn mul(self, other: MatrixMN<Complex, D, D>) -> Self::Output {
-        Bra(self.0 * other)
+    fn mul(self, other: Outer<D>) -> Self::Output {
+        Bra(self.0 * other.0)
     }
 }
 
@@ -204,9 +208,63 @@ impl<D: DimName> From<Bra<D>> for Ket<D>
     }
 }
 
+impl<D: DimName> Mul<Ket<D>> for Outer<D>
+    where DefaultAllocator: Allocator<Complex, D> + Allocator<Complex, D, D>
+{
+    type Output = Ket<D>;
+
+    fn mul(self, other: Ket<D>) -> Self::Output {
+        Ket(self.0 * other.0)
+    }
+}
+
+impl<D: DimName> Add<Outer<D>> for Outer<D>
+    where DefaultAllocator: Allocator<Complex, D, D>
+{
+    type Output = Self;
+
+    fn add(self, other: Outer<D>) -> Self::Output {
+        Outer(self.0 + other.0)
+    }
+}
+
 pub type Bra2 = Bra<U2>;
 pub type Ket2 = Ket<U2>;
 
+impl<D: DimName> ::std::fmt::Display for Outer<D>
+    where DefaultAllocator: Allocator<Complex, D, D>,
+    DefaultAllocator: Allocator<usize, D, D>
+{
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl<D: DimName> ::std::fmt::Display for Bra<D>
+    where DefaultAllocator: Allocator<Complex, U1, D>,
+    DefaultAllocator: Allocator<usize, U1, D>
+{
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl<D: DimName> ::std::fmt::Display for Ket<D>
+    where DefaultAllocator: Allocator<Complex, D>,
+    DefaultAllocator: Allocator<usize, D>
+{
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl<D: DimName> Outer<D>
+    where DefaultAllocator: Allocator<Complex, D, D>
+{
+    pub fn into_matrix(self) -> MatrixMN<Complex, D, D> {
+        self.0
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -230,7 +288,7 @@ mod tests {
 
     #[test]
     fn outer() {
-        let outer = Ket2::up() * Bra2::down();
+        let outer = (Ket2::up() * Bra2::down()).into_matrix();
         assert!(unsafe { outer.get_unchecked(0, 0).im } < E);
         assert!(unsafe { outer.get_unchecked(0, 1).re } - 1.0 < E);
     }
