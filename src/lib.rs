@@ -2,7 +2,7 @@ extern crate num_complex;
 extern crate nalgebra;
 extern crate typenum;
 
-pub(crate) use num_complex::Complex64 as Complex;
+pub use num_complex::Complex64 as Complex;
 pub(crate) const SQRT_2_INVERSE: f64 = 0.70710678118;
 
 mod bra;

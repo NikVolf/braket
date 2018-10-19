@@ -44,3 +44,21 @@ impl<D: DimName> Outer<D>
         self.0
     }
 }
+
+impl<D: DimName> From<MatrixMN<Complex, D, D>> for Outer<D>
+    where DefaultAllocator: Allocator<Complex, D, D>
+{
+    fn from(v: MatrixMN<Complex, D, D>) -> Self {
+        Outer(v)
+    }
+}
+
+impl<D: DimName> Mul<f64> for Outer<D>
+    where DefaultAllocator: Allocator<Complex, D, D>
+{
+    type Output = Self;
+
+    fn mul(self, other: f64) -> Self::Output {
+        Outer(self.0 * Complex::new(other, 0.0))
+    }
+}
