@@ -1,13 +1,13 @@
 extern crate brakets;
 extern crate nalgebra;
 
-use brakets::{Bra2, Ket2, Complex, Outer};
+use brakets::{Ket2, Complex, Outer};
 
 fn main() {
 
-    /// Various operators on standard states
+    // Various operators on standard states
 
-    let A = nalgebra::Matrix2::<Complex>::new(
+    let a = nalgebra::Matrix2::<Complex>::new(
         0.0.into(),
         1.0.into(),
         1.0.into(),
@@ -17,15 +17,15 @@ fn main() {
 
     println!(
         "{} on {} = {}",
-        Outer::from(A),
+        Outer::from(a),
         Ket2::up(),
-        Outer::from(A) * Ket2::up()
+        Outer::from(a) * Ket2::up()
     );
 
     println!(
         "{} on {} = {}",
-        Outer::from(A),
+        Outer::from(a),
         Ket2::down(),
-        Outer::from(A) * Ket2::down()
+        Outer::from(a) * Ket2::down()
     );
 }
