@@ -103,6 +103,14 @@ impl<D: DimName> From<Bra<D>> for Ket<D>
     }
 }
 
+impl<D: DimName> From<VectorN<Complex, D>> for Ket<D>
+    where DefaultAllocator: Allocator<Complex, D>
+{
+    fn from(v: VectorN<Complex, D>) -> Self {
+        Ket(v)
+    }
+}
+
 impl<D: DimName> ::std::fmt::Display for Ket<D>
     where DefaultAllocator: Allocator<Complex, D>,
     DefaultAllocator: Allocator<usize, D>

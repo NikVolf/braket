@@ -114,6 +114,14 @@ impl<D: DimName> From<Ket<D>> for Bra<D>
     }
 }
 
+impl<D: DimName> From<RowVectorN<Complex, D>> for Bra<D>
+    where DefaultAllocator: Allocator<Complex, U1, D>
+{
+    fn from(v: RowVectorN<Complex, D>) -> Self {
+        Bra(v)
+    }
+}
+
 impl<D: DimName> ::std::fmt::Display for Bra<D>
     where DefaultAllocator: Allocator<Complex, U1, D>,
     DefaultAllocator: Allocator<usize, U1, D>
