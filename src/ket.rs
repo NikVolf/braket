@@ -4,6 +4,7 @@ use nalgebra::allocator::Allocator;
 
 use {SQRT_2_INVERSE, Bra, Outer, Complex};
 
+/// Generic ket. You can multiply it by bra to an outer product (or operator).
 #[derive(Clone)]
 pub struct Ket<D: DimName>(pub(crate) VectorN<Complex, D>)
     where DefaultAllocator: Allocator<Complex, D>;
@@ -11,6 +12,7 @@ pub struct Ket<D: DimName>(pub(crate) VectorN<Complex, D>)
 impl<D: DimName> Ket<D>
     where DefaultAllocator: Allocator<Complex, D>
 {
+    /// Up 2-dimension ket
     pub fn up() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -20,6 +22,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
+    /// Down 2-dimension ket
     pub fn down() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -29,6 +32,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
+    /// Right 2-dimension ket
     pub fn right() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -38,6 +42,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
+    /// Left 2-dimension ket
     pub fn left() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -47,6 +52,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
+    /// Inward 2-dimension ket
     pub fn inw() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -56,6 +62,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
+    /// Outward 2-dimension ket
     pub fn out() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(

@@ -1,3 +1,7 @@
+//! Strongly-typed bra-ket notation for quantum objects.
+
+#![warn(missing_docs)]
+
 extern crate num_complex;
 extern crate nalgebra;
 extern crate typenum;
@@ -14,5 +18,7 @@ pub use bra::Bra;
 pub use ket::Ket;
 pub use outer::Outer;
 
+/// 2-dimension bra
 pub type Bra2 = Bra<nalgebra::U2>;
+/// 2-dimension ket
 pub type Ket2 = Ket<nalgebra::U2>;

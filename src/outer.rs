@@ -4,6 +4,8 @@ use nalgebra::allocator::Allocator;
 
 use {Ket, Complex};
 
+/// Outer product in bra-ket notation, as well used as a linear operatior.
+/// You can multiply it by ket to put it in the observable state defined by the operator.
 #[derive(Clone)]
 pub struct Outer<D: DimName>(pub(crate) MatrixMN<Complex, D, D>)
     where DefaultAllocator: Allocator<Complex, D, D>;
@@ -40,6 +42,7 @@ impl<D: DimName> Add<Outer<D>> for Outer<D>
 impl<D: DimName> Outer<D>
     where DefaultAllocator: Allocator<Complex, D, D>
 {
+    /// Deconstruct the outer product returning the inner matrix.
     pub fn into_matrix(self) -> MatrixMN<Complex, D, D> {
         self.0
     }

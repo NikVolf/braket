@@ -4,6 +4,7 @@ use nalgebra::allocator::Allocator;
 
 use {SQRT_2_INVERSE, Ket, Outer, Complex};
 
+/// Generic Bra. You can multiply it by ket to get an inner product (scalar).
 #[derive(Clone)]
 pub struct Bra<D: DimName>(pub(crate) RowVectorN<Complex, D>)
     where DefaultAllocator: Allocator<Complex, U1, D>;
@@ -11,6 +12,7 @@ pub struct Bra<D: DimName>(pub(crate) RowVectorN<Complex, D>)
 impl<D: DimName> Bra<D>
     where DefaultAllocator: Allocator<Complex, U1, D>
 {
+    /// 2-dimension "up" bra
     pub fn up() -> Bra<U2> {
         Bra::<U2>(
             RowVector2::new(
@@ -20,6 +22,7 @@ impl<D: DimName> Bra<D>
         )
     }
 
+    /// 2-dimension "down" bra
     pub fn down() -> Bra<U2> {
         Bra::<U2>(
             RowVector2::new(
@@ -29,6 +32,7 @@ impl<D: DimName> Bra<D>
         )
     }
 
+    /// 2-dimension "right" bra
     pub fn right() -> Bra<U2> {
         Bra::<U2>(
             RowVector2::new(
@@ -38,6 +42,7 @@ impl<D: DimName> Bra<D>
         )
     }
 
+    /// 2-dimension "left" bra
     pub fn left() -> Bra<U2> {
         Bra::<U2>(
             RowVector2::new(
@@ -47,6 +52,7 @@ impl<D: DimName> Bra<D>
         )
     }
 
+    /// 2-dimension "inward" bra
     pub fn inw() -> Bra<U2> {
         Bra::<U2>(
             RowVector2::new(
@@ -56,6 +62,7 @@ impl<D: DimName> Bra<D>
         )
     }
 
+    /// 2-dimension "outward" bra
     pub fn out() -> Bra<U2> {
         Bra::<U2>(
             RowVector2::new(
