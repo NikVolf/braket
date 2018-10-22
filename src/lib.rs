@@ -1,4 +1,4 @@
-//! Strongly-typed bra-ket notation for quantum objects.
+//! Strongly-typed bra-ket notation for discrete quantum objects.
 
 #![warn(missing_docs)]
 
