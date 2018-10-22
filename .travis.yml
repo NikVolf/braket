@@ -1,0 +1,19 @@
+dist: trusty
+sudo: required
+language: rust
+rust:
+- nightly
+- stable
+script:
+- cargo test --release --all
+after_success: |-
+  [ $TRAVIS_BRANCH = master ] &&
+  [ $TRAVIS_PULL_REQUEST = false ] &&
+  cargo doc --no-deps \
+  && echo '<meta http-equiv=refresh content=0;url=braket/index.html>' > target/doc/index.html && \
+  sudo pip install ghp-import && \
+  ghp-import -n target/doc && \
+  git push -qf https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+env:
+  global:
+  - secure: oI+P5jFEUQM9ZYEW6Sow1/ZfcLBt+qOf6GFx0fmugSz5+dcGejn/4KjAA//CEmpvQL9HLFhCr4uCVo6fyP1ROWKoOizv2sjl43MZhUDHBYYqSsqcrW1E9YnKhOFqqM5jnYElhGIZz3QaI33hCx1e2+q0qMl+T+QWVOQU/MotxKn6LW6+D6o8Kw3a2uD3+X6+rdna3zsol1Ly/45gMGojlryP5TyaQ/VLyi1ic5qvIdpozTY2ujXueL+QFaORs4P6hlqeZx3XtZwTlPAsmYlfzeaeJSGBViwuqUkTQeB5x6Pthq6iIlUUoG+DN7m5ESVo0nhQOuZHb7ogoSLw3A1C1xI7fPhNajxsrVJfktpWNSWp/Uz3qFvGSRh71weeHMPv2/ZttzXZIxqPDD1kg6LkGZ1l8hmBVq3RIXcMkqa90QSu4KycryDBFueTQlCaZio9XvBX/f/+3G1sCrRZAzIzoEa+RGB3QQYTy2LZ2NFczYf6sOpCvvCC+FAMDvHx3LS6jKV5Zi1dscx91tlR63/EWJio+D92DBXanwO8eh8mWglz46Jown8R4AEIznHXUNyfZRrtk8gmY50c9eKqvnF4cmfGFOIM7SYYZ8s1MAH8auvi/nLgwiFWqePIkF2ntfSg0qn6in8KUKHWRwNodhCkrFcKjJmcbg0wypthh78wKp8=
