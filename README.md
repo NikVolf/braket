@@ -4,7 +4,7 @@ Strongly typed bra-ket notations for Rust!
 
 [![Build Status](https://travis-ci.org/NikVolf/braket.svg?branch=master)](https://travis-ci.org/NikVolf/braket)
 
-[Documentation](https://nikvolf.github.io/braket/)
+[Documentation](https://nikvolf.github.io/braket/brakets/index.html)
 
 # License
 
