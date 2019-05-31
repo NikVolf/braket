@@ -19,6 +19,6 @@ fn prob() {
 #[test]
 fn outer() {
     let outer = (Ket2::up() * Bra2::down()).into_matrix();
-    assert!(unsafe { outer.get_unchecked(0, 0).im } < E);
-    assert!(unsafe { outer.get_unchecked(0, 1).re } - 1.0 < E);
+    assert!(unsafe { outer.get_unchecked((0, 0)).im } < E);
+    assert!(unsafe { outer.get_unchecked((0, 1)).re } - 1.0 < E);
 }

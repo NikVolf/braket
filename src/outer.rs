@@ -1,8 +1,8 @@
 use std::ops::{Mul, Add};
-use nalgebra::{DefaultAllocator, MatrixMN, DimName};
+use nalgebra::{DefaultAllocator, MatrixMN, DimName, U2, Matrix2};
 use nalgebra::allocator::Allocator;
 
-use {Ket, Complex};
+use {Ket, Complex, SQRT_2_INVERSE};
 
 /// Outer product in bra-ket notation, as well used as a linear operatior.
 /// You can multiply it by ket to put it in the observable state defined by the operator.
@@ -45,6 +45,11 @@ impl<D: DimName> Outer<D>
     /// Deconstruct the outer product returning the inner matrix.
     pub fn into_matrix(self) -> MatrixMN<Complex, D, D> {
         self.0
+    }
+
+    /// H2 (2 dim hadamard) operator
+    pub fn h2() -> Outer<U2> {
+        Outer::<U2>(Matrix2::<Complex>::new(1.0.into(), 1.0.into(), 1.0.into(), (-1.0).into())) * SQRT_2_INVERSE
     }
 }
 

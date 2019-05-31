@@ -81,7 +81,7 @@ impl<D: DimName> Mul<Ket<D>> for Bra<D>
     fn mul(self, other: Ket<D>) -> Self::Output {
         let mut m = self.0;
         for f in m.iter_mut() { *f = f.conj(); }
-        unsafe { *(m * other.0).get_unchecked(0, 0) }
+        unsafe { *(m * other.0).get_unchecked(0) }
     }
 }
 

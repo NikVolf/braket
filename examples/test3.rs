@@ -4,7 +4,7 @@ use brakets::{Bra2, Ket2};
 
 fn main() {
 
-    /// This is how up-down operator is calculated
+    // This is how up-down operator is calculated
 
     println!(
         "+s (>u|<u) - s(>d|<d) = {}, where s = 1.0",
