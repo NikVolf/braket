@@ -22,3 +22,5 @@ pub use outer::Outer;
 pub type Bra2 = Bra<nalgebra::U2>;
 /// 2-dimension ket
 pub type Ket2 = Ket<nalgebra::U2>;
+/// 2-dimension outer
+pub type Outer2 = Outer<nalgebra::U2>;
