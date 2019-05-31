@@ -51,6 +51,16 @@ impl<D: DimName> Outer<D>
     pub fn h2() -> Outer<U2> {
         Outer::<U2>(Matrix2::<Complex>::new(1.0.into(), 1.0.into(), 1.0.into(), (-1.0).into())) * SQRT_2_INVERSE
     }
+
+    /// Z2 (2 dim Z-gate) operator
+    pub fn z2() -> Outer<U2> {
+        Outer::<U2>(Matrix2::<Complex>::new(1.0.into(), 0.0.into(), 0.0.into(), (-1.0).into()))
+    }
+
+    /// N2 (2 dim N-gate) operator
+    pub fn n2() -> Outer<U2> {
+        Outer::<U2>(Matrix2::<Complex>::new(0.0.into(), 1.0.into(), 1.0.into(), 0.0.into()))
+    }
 }
 
 impl<D: DimName> From<MatrixMN<Complex, D, D>> for Outer<D>
