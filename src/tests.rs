@@ -1,4 +1,4 @@
-use {Bra2, Ket2, Outer2, SQRT_2_INVERSE};
+use {Bra2, Ket2, Outer2};
 
 const E: f64 = 0.00000000001;
 
@@ -58,13 +58,15 @@ fn hadamard() {
 #[test]
 fn zgate_phase() {
     let hadamard_product_up = Bra2::up() * Outer2::h2();
-    let z_up = hadamard_product_up * Outer2::z2();
+    let hadamard_product_down = Bra2::down() * Outer2::h2();
+    let z_up = hadamard_product_up.clone() * Outer2::z2();
+    let z_down = hadamard_product_down.clone() * Outer2::z2();
 
-    assert!(
-        unsafe { z_up.0.get_unchecked(0).re - SQRT_2_INVERSE } < E
+    assert_eq!(
+        z_up, hadamard_product_down
     );
 
-    assert!(
-        unsafe { z_up.0.get_unchecked(1).re + SQRT_2_INVERSE } < E
+    assert_eq!(
+        z_down, hadamard_product_up
     );
 }

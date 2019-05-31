@@ -5,7 +5,7 @@ use nalgebra::allocator::Allocator;
 use {SQRT_2_INVERSE, Bra, Outer, Complex};
 
 /// Generic ket. You can multiply it by bra to an outer product (or operator).
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Ket<D: DimName>(pub(crate) VectorN<Complex, D>)
     where DefaultAllocator: Allocator<Complex, D>;
 

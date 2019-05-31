@@ -6,7 +6,7 @@ use {Ket, Complex, SQRT_2_INVERSE};
 
 /// Outer product in bra-ket notation, as well used as a linear operatior.
 /// You can multiply it by ket to put it in the observable state defined by the operator.
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Outer<D: DimName>(pub(crate) MatrixMN<Complex, D, D>)
     where DefaultAllocator: Allocator<Complex, D, D>;
 

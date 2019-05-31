@@ -5,7 +5,7 @@ use nalgebra::allocator::Allocator;
 use {SQRT_2_INVERSE, Ket, Outer, Complex};
 
 /// Generic Bra. You can multiply it by ket to get an inner product (scalar).
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Bra<D: DimName>(pub(crate) RowVectorN<Complex, D>)
     where DefaultAllocator: Allocator<Complex, U1, D>;
 
