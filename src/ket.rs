@@ -95,6 +95,16 @@ impl<D: DimName> Add for Ket<D>
     }
 }
 
+impl<D: DimName> Mul<Complex> for Ket<D>
+    where DefaultAllocator: Allocator<Complex, D, U1>
+{
+    type Output = Self;
+
+    fn mul(self, other: Complex) -> Self::Output {
+        Ket(self.0 * other)
+    }
+}
+
 impl<D: DimName> From<Bra<D>> for Ket<D>
     where DefaultAllocator: Allocator<Complex, D> + Allocator<Complex, D, D> + Allocator<Complex, U1, D>
 {

@@ -21,6 +21,30 @@ impl From<char> for Symbol {
     }
 }
 
+impl Symbol {
+    fn to_bra(&self) -> brakets::Bra2 {
+        match &self {
+            Symbol::Up | Symbol::One => brakets::Bra2::up(),
+            Symbol::Down | Symbol::Zero => brakets::Bra2::down(),
+            Symbol::Left | Symbol::Minus => brakets::Bra2::left(),
+            Symbol::Right | Symbol::Plus => brakets::Bra2::right(),
+            Symbol::Inward => brakets::Bra2::inw(),
+            Symbol::Outward => brakets::Bra2::out(),
+        }
+    }
+
+    fn to_ket(&self) -> brakets::Ket2 {
+        match &self {
+            Symbol::Up | Symbol::One => brakets::Ket2::up(),
+            Symbol::Down | Symbol::Zero => brakets::Ket2::down(),
+            Symbol::Left | Symbol::Minus => brakets::Ket2::left(),
+            Symbol::Right | Symbol::Plus => brakets::Ket2::right(),
+            Symbol::Inward => brakets::Ket2::inw(),
+            Symbol::Outward => brakets::Ket2::out(),
+        }
+    }
+}
+
 #[derive(Debug)]
 enum Item {
     Bra(Symbol),
@@ -54,6 +78,59 @@ struct ErrorState {
     encounter: char,
 }
 
+#[derive(Debug)]
+enum EvaluationState {
+    None,
+    Bra(brakets::Bra2),
+    Ket(brakets::Ket2),
+    Outer(brakets::Outer2),
+    Scalar(brakets::Complex),
+    Invalid,
+}
+
+impl ::std::fmt::Display for EvaluationState {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        match *self {
+            EvaluationState::None => write!(f, "None"),
+            EvaluationState::Bra(ref bra) => write!(f, "<{}|", bra),
+            EvaluationState::Ket(ref ket) => write!(f, "|{}>", ket),
+            EvaluationState::Outer(ref outer) => write!(f, "{}", outer),
+            EvaluationState::Scalar(ref scalar) => write!(f, "{}", scalar),
+            EvaluationState::Invalid => write!(f, "Invalid"),
+        }
+    }
+}
+
+impl EvaluationState {
+    fn eval(self, item: Item) -> Self {
+        let result = match (self, item) {
+            (EvaluationState::None, Item::Ket(ref s)) => EvaluationState::Ket(s.to_ket()),
+            (EvaluationState::None, Item::Bra(ref s)) => EvaluationState::Bra(s.to_bra()),
+            (EvaluationState::Bra(ref mut bra), Item::Ket(ref s)) => {
+                EvaluationState::Scalar(bra.clone() * s.to_ket())
+            },
+            (EvaluationState::Ket(ref mut ket), Item::Bra(ref s)) => {
+                EvaluationState::Outer(ket.clone() * s.to_bra())
+            },
+            (EvaluationState::Scalar(ref mut scalar), Item::Bra(ref s)) => {
+                EvaluationState::Bra(s.to_bra() * *scalar)
+            },
+            (EvaluationState::Scalar(ref mut scalar), Item::Ket(ref s)) => {
+                EvaluationState::Ket(s.to_ket() * *scalar)
+            },
+            (EvaluationState::Outer(ref mut outer), Item::Ket(ref s)) => {
+                EvaluationState::Ket(outer.clone() * s.to_ket())
+            },
+            (EvaluationState::Outer(ref mut outer), Item::Bra(ref s)) => {
+                EvaluationState::Bra(s.to_bra() * outer.clone())
+            },
+            _ => EvaluationState::Invalid,
+        };
+
+        result
+    }
+}
+
 fn main() {
     let expression = ::std::env::args().nth(1).expect("should be 1 argument");
 
@@ -84,7 +161,7 @@ fn main() {
             },
             '|' => {
                 match state {
-                    State::Initial => {
+                    State::Initial | State::FinishedKet => {
                         state = State::StartedKet;
                     },
                     State::IdentifiedBra(s) => {
@@ -115,7 +192,7 @@ fn main() {
                     }
                 }
             },
-            'u' | 'd' => {
+            'u' | 'd' | 'o' | 'i' | '1' | '0' | '-' | '+' | 'l' | 'r' => {
                 match state {
                     State::StartedBra => {
                         state = State::IdentifiedBra(Symbol::from(chr));
@@ -152,6 +229,15 @@ fn main() {
         },
         None => {
             println!("{:?}", stack);
+
+            let mut evaluation_state = EvaluationState::None;
+
+            for s in stack.drain(..) {
+                evaluation_state = evaluation_state.eval(s);
+            }
+
+            println!("{}", evaluation_state);
+
         }
     };
 }
