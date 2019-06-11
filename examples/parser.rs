@@ -3,6 +3,24 @@ extern crate brakets;
 #[derive(Debug)]
 enum Symbol { One, Zero, Up, Down, Inward, Outward, Left, Right, Plus, Minus}
 
+impl From<char> for Symbol {
+    fn from(c: char) -> Symbol {
+        match c {
+            'u' => Symbol::Up,
+            'd' => Symbol::Down,
+            '1' => Symbol::One,
+            '0' => Symbol::Zero,
+            'i' => Symbol::Inward,
+            'o' => Symbol::Outward,
+            'l' => Symbol::Left,
+            'r' => Symbol::Right,
+            '+' => Symbol::Plus,
+            '-' => Symbol::Minus,
+            _ => panic!("Caller should not pass other than ud10iolr+-"),
+        }
+    }
+}
+
 #[derive(Debug)]
 enum Item {
     Bra(Symbol),
@@ -100,30 +118,10 @@ fn main() {
             'u' | 'd' => {
                 match state {
                     State::StartedBra => {
-                        match chr {
-                            'u' => state = State::IdentifiedBra(Symbol::Up),
-                            'd' => state = State::IdentifiedBra(Symbol::Down),
-                            _ => {
-                                error_state = Some(ErrorState {
-                                    index,
-                                    encounter: chr,
-                                    kind: Error::Unexpected,
-                                });
-                            }
-                        }
+                        state = State::IdentifiedBra(Symbol::from(chr));
                     },
                     State::StartedKet | State::FinishedBra => {
-                        match chr {
-                            'u' => state = State::IdentifiedKet(Symbol::Up),
-                            'd' => state = State::IdentifiedKet(Symbol::Down),
-                            _ => {
-                                error_state = Some(ErrorState {
-                                    index,
-                                    encounter: chr,
-                                    kind: Error::Unexpected,
-                                });
-                            }
-                        }
+                        state = State::IdentifiedKet(Symbol::from(chr));
                     },
                     _ => {
                         error_state = Some(ErrorState {
