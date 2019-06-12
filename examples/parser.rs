@@ -64,11 +64,10 @@ enum State {
 
 #[derive(Debug)]
 enum Error {
-    ExpectedBraOrKet,
-    ExpectedIdent,
+    UnexpectedBra,
     UnexpectedFinalizer,
     UnexpectedSymbol,
-    Unexpected,
+    UnexpectedKet,
 }
 
 #[derive(Debug)]
@@ -104,25 +103,25 @@ impl ::std::fmt::Display for EvaluationState {
 impl EvaluationState {
     fn eval(self, item: Item) -> Self {
         let result = match (self, item) {
-            (EvaluationState::None, Item::Ket(ref s)) => EvaluationState::Ket(s.to_ket()),
-            (EvaluationState::None, Item::Bra(ref s)) => EvaluationState::Bra(s.to_bra()),
-            (EvaluationState::Bra(ref mut bra), Item::Ket(ref s)) => {
-                EvaluationState::Scalar(bra.clone() * s.to_ket())
+            (EvaluationState::None, Item::Ket(s)) => EvaluationState::Ket(s.to_ket()),
+            (EvaluationState::None, Item::Bra(s)) => EvaluationState::Bra(s.to_bra()),
+            (EvaluationState::Bra(bra), Item::Ket(s)) => {
+                EvaluationState::Scalar(bra * s.to_ket())
             },
-            (EvaluationState::Ket(ref mut ket), Item::Bra(ref s)) => {
-                EvaluationState::Outer(ket.clone() * s.to_bra())
+            (EvaluationState::Ket(ket), Item::Bra(s)) => {
+                EvaluationState::Outer(ket * s.to_bra())
             },
-            (EvaluationState::Scalar(ref mut scalar), Item::Bra(ref s)) => {
-                EvaluationState::Bra(s.to_bra() * *scalar)
+            (EvaluationState::Scalar(scalar), Item::Bra(s)) => {
+                EvaluationState::Bra(s.to_bra() * scalar)
             },
-            (EvaluationState::Scalar(ref mut scalar), Item::Ket(ref s)) => {
-                EvaluationState::Ket(s.to_ket() * *scalar)
+            (EvaluationState::Scalar(scalar), Item::Ket(s)) => {
+                EvaluationState::Ket(s.to_ket() * scalar)
             },
-            (EvaluationState::Outer(ref mut outer), Item::Ket(ref s)) => {
-                EvaluationState::Ket(outer.clone() * s.to_ket())
+            (EvaluationState::Outer(outer), Item::Ket(s)) => {
+                EvaluationState::Ket(outer * s.to_ket())
             },
-            (EvaluationState::Outer(ref mut outer), Item::Bra(ref s)) => {
-                EvaluationState::Bra(s.to_bra() * outer.clone())
+            (EvaluationState::Outer(outer), Item::Bra(s)) => {
+                EvaluationState::Bra(s.to_bra() * outer)
             },
             _ => EvaluationState::Invalid,
         };
@@ -154,7 +153,7 @@ fn main() {
                         error_state = Some(ErrorState {
                             index: index,
                             encounter: chr,
-                            kind: Error::Unexpected,
+                            kind: Error::UnexpectedBra,
                         });
                     }
                 }
@@ -172,7 +171,7 @@ fn main() {
                         error_state = Some(ErrorState {
                             index,
                             encounter: chr,
-                            kind: Error::Unexpected,
+                            kind: Error::UnexpectedKet,
                         });
                     }
                 }
@@ -237,7 +236,6 @@ fn main() {
             }
 
             println!("{}", evaluation_state);
-
         }
     };
 }

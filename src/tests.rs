@@ -1,4 +1,4 @@
-use {Bra2, Ket2, Outer2};
+use {Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex};
 
 const E: f64 = 0.00000000001;
 
@@ -69,4 +69,16 @@ fn zgate_phase() {
     assert_eq!(
         z_down, hadamard_product_up
     );
+}
+
+#[test]
+fn bell_state() {
+    let state = (Ket2::up().cross(Ket2::up()) + Ket2::down().cross(Ket2::down())) * Complex::from(SQRT_2_INVERSE);
+
+    let q11 = Ket2::up().cross(Ket2::up());
+
+    // bell state (|00> + |11>)/2^-1/2 is 50% in computational basis
+    let prob = (Bra4::from(q11) * state).norm().powi(2);
+
+    assert!(prob.abs() - 0.5 < E);
 }

@@ -1,5 +1,5 @@
 use std::ops::{Mul, Add};
-use nalgebra::{DefaultAllocator, U1, VectorN, Vector2, DimName, U2};
+use nalgebra::{DefaultAllocator, U1, VectorN, Vector2, DimName, U2, DimNameAdd, DimNameSum, Vector};
 use nalgebra::allocator::Allocator;
 
 use {SQRT_2_INVERSE, Bra, Outer, Complex};
@@ -71,6 +71,26 @@ impl<D: DimName> Ket<D>
             )
         )
     }
+
+    /// Kronecker product of two kets
+    pub fn cross(self, other: Ket<D>) -> Ket<DimNameSum<D, D>>
+        where
+            D: DimNameAdd<D>,
+            DefaultAllocator: Allocator<Complex, DimNameSum<D, D>>
+    {
+        let mut result = Vector::zeros_generic(DimNameSum::<D, D>::name(), U1);
+        let dim = D::name().value();
+        for i in 0..dim {
+            for j in 0..dim {
+                unsafe {
+                    *result.get_unchecked_mut(
+                        i*dim + j
+                    ) = self.0.get_unchecked(i) * other.0.get_unchecked(j);
+                }
+            }
+        }
+        Ket(result)
+    }
 }
 
 impl<D: DimName> Mul<Bra<D>> for Ket<D>
@@ -104,6 +124,7 @@ impl<D: DimName> Mul<Complex> for Ket<D>
         Ket(self.0 * other)
     }
 }
+
 
 impl<D: DimName> From<Bra<D>> for Ket<D>
     where DefaultAllocator: Allocator<Complex, D> + Allocator<Complex, D, D> + Allocator<Complex, U1, D>

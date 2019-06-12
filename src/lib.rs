@@ -24,3 +24,9 @@ pub type Bra2 = Bra<nalgebra::U2>;
 pub type Ket2 = Ket<nalgebra::U2>;
 /// 2-dimension outer
 pub type Outer2 = Outer<nalgebra::U2>;
+/// 4-dimension bra (for entangled states)
+pub type Bra4 = Bra<nalgebra::U4>;
+/// 4-dimension ket (for entangled states)
+pub type Ket4 = Ket<nalgebra::U4>;
+/// 4-dimension ket (for entangled states)
+pub type Outer4 = Outer<nalgebra::U4>;
