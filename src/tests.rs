@@ -1,4 +1,5 @@
 use {Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex};
+use Outer4;
 
 const E: f64 = 0.00000000001;
 
@@ -81,4 +82,16 @@ fn bell_state() {
     let prob = (Bra4::from(q11) * state).norm().powi(2);
 
     assert!(prob.abs() - 0.5 < E);
+}
+
+#[test]
+fn bell_cnot() {
+    let bell_state = (Ket2::up().cross(Ket2::up()) + Ket2::down().cross(Ket2::down())) * Complex::from(SQRT_2_INVERSE);
+
+    let q1 = Outer2::h2() * Ket2::up();
+    let q2  = Ket2::up();
+
+    let bell_state2 = Outer4::cnot() * q1.cross(q2);
+
+    assert_eq!(bell_state, bell_state2);
 }

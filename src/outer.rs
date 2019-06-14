@@ -1,5 +1,5 @@
 use std::ops::{Mul, Add};
-use nalgebra::{DefaultAllocator, MatrixMN, DimName, U2, Matrix2};
+use nalgebra::{DefaultAllocator, MatrixMN, DimName, U2, U4, Matrix2, Matrix4};
 use nalgebra::allocator::Allocator;
 
 use {Ket, Complex, SQRT_2_INVERSE};
@@ -60,6 +60,18 @@ impl<D: DimName> Outer<D>
     /// N2 (2 dim N-gate) operator
     pub fn n2() -> Outer<U2> {
         Outer::<U2>(Matrix2::<Complex>::new(0.0.into(), 1.0.into(), 1.0.into(), 0.0.into()))
+    }
+
+    /// CNOT (2*2 dim) operator
+    pub fn cnot() -> Outer<U4> {
+        Outer::<U4>(
+            Matrix4::<Complex>::new(
+                1.0.into(), 0.0.into(), 0.0.into(), 0.0.into(),
+                0.0.into(), 1.0.into(), 0.0.into(), 0.0.into(),
+                0.0.into(), 0.0.into(), 0.0.into(), 1.0.into(),
+                0.0.into(), 0.0.into(), 1.0.into(), 0.0.into(),
+            )
+        )
     }
 }
 
