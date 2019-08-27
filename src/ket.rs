@@ -12,7 +12,7 @@ pub struct Ket<D: DimName>(pub(crate) VectorN<Complex, D>)
 impl<D: DimName> Ket<D>
     where DefaultAllocator: Allocator<Complex, D>
 {
-    /// Up 2-dimension ket
+    /// Up 2-dimension ket, [1, 0]
     pub fn up() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -22,7 +22,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
-    /// Down 2-dimension ket
+    /// Down 2-dimension ket, [0, 1]
     pub fn down() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -32,7 +32,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
-    /// Right 2-dimension ket
+    /// Right 2-dimension ket, 1/√2[1, 1]
     pub fn right() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -42,7 +42,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
-    /// Left 2-dimension ket
+    /// Left 2-dimension ket, 1/√2[1, -1]
     pub fn left() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -52,7 +52,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
-    /// Inward 2-dimension ket
+    /// Inward 2-dimension ket, 1/√2[1, i]
     pub fn inw() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -62,7 +62,7 @@ impl<D: DimName> Ket<D>
         )
     }
 
-    /// Outward 2-dimension ket
+    /// Outward 2-dimension ket, 1/√2[1, -i]
     pub fn out() -> Ket<U2> {
         Ket::<U2>(
             Vector2::new(
@@ -72,7 +72,9 @@ impl<D: DimName> Ket<D>
         )
     }
 
-    /// Kronecker product of two kets
+    /// Kronecker (tensor) product of two kets
+    ///
+    /// For qubits, it's possible to produce only 2 qubits state with this product.
     pub fn cross(self, other: Ket<D>) -> Ket<DimNameSum<D, D>>
         where
             D: DimNameAdd<D>,
