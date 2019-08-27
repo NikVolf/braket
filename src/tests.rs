@@ -113,6 +113,7 @@ fn qft() {
     //  1   i  -1  -i
     //  1  -1   1  -1
     //  1  -i  -1   i
+    // (multiplied by 1/sqrt(4) = 1/2)
 
     assert_approx_eq!(qft4[(0, 0)].im, 0.0);
     assert_approx_eq!(qft4[(0, 0)].re, 0.5);
