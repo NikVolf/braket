@@ -3,8 +3,6 @@ use assert_approx_eq::assert_approx_eq;
 use {Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex};
 use ::{Outer4};
 
-const E: f64 = 0.00000000001;
-
 #[test]
 fn orthogonal() {
     assert!((Bra2::up() * Ket2::down()).norm() == 0.0);
@@ -14,16 +12,16 @@ fn orthogonal() {
 
 #[test]
 fn prob() {
-    assert!((Bra2::up() * Ket2::left()).norm().powi(2) - 0.5 < E);
-    assert!((Bra2::down() * Ket2::right()).norm().powi(2) - 0.5 < E);
-    assert!((Bra2::up() * Ket2::inw()).norm().powi(2) - 0.5 < E);
+    assert_approx_eq!((Bra2::up() * Ket2::left()).norm().powi(2), 0.5);
+    assert_approx_eq!((Bra2::down() * Ket2::right()).norm().powi(2), 0.5);
+    assert_approx_eq!((Bra2::up() * Ket2::inw()).norm().powi(2), 0.5);
 }
 
 #[test]
 fn outer() {
     let outer = (Ket2::up() * Bra2::down()).into_matrix();
-    assert!(unsafe { outer.get_unchecked((0, 0)).im } < E);
-    assert!(unsafe { outer.get_unchecked((0, 1)).re } - 1.0 < E);
+    assert_approx_eq!(unsafe { outer.get_unchecked((0, 0)).im }, 0.0);
+    assert_approx_eq!(unsafe { outer.get_unchecked((0, 1)).re }, 1.0);
 }
 
 #[test]
@@ -32,11 +30,11 @@ fn hadamard() {
     let hadamard_product_down = Bra2::up() * Outer2::h2();
 
     // hadamard gate produces 50/50 probability
-    assert!(
-        (hadamard_product_up * Ket2::up()).norm().powi(2) - 0.5 < E
+    assert_approx_eq!(
+        (hadamard_product_up * Ket2::up()).norm().powi(2), 0.5
     );
-    assert!(
-        (hadamard_product_down * Ket2::up()).norm().powi(2) - 0.5 < E
+    assert_approx_eq!(
+        (hadamard_product_down * Ket2::up()).norm().powi(2), 0.5
     );
 
     // double hadamard should equal to identity transformation
