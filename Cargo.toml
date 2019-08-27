@@ -7,3 +7,6 @@ authors = ["NikVolf <nikvolf@gmail.com>"]
 num-complex = "*"
 nalgebra = "*"
 typenum = "*"
+
+[dev-dependencies]
+assert_approx_eq = "1.1.0"

@@ -1,5 +1,7 @@
+use assert_approx_eq::assert_approx_eq;
+
 use {Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex};
-use Outer4;
+use ::{Outer4};
 
 const E: f64 = 0.00000000001;
 
@@ -38,21 +40,29 @@ fn hadamard() {
     );
 
     // double hadamard should equal to identity transformation
-    assert!(
+    assert_approx_eq!(
         (((Bra2::up() * Outer2::h2()) * Outer2::h2()) * Ket2::up())
-            .norm().powi(2) - 1.0 < E
+            .norm().powi(2),
+
+        1.0
     );
-    assert!(
+    assert_approx_eq!(
         (((Bra2::down() * Outer2::h2()) * Outer2::h2()) * Ket2::down())
-            .norm().powi(2) - 1.0 < E
+            .norm().powi(2),
+
+        1.0
     );
-    assert!(
+    assert_approx_eq!(
         (((Bra2::up() * Outer2::h2()) * Outer2::h2()) * Ket2::down())
-            .norm().powi(2) < E
+            .norm().powi(2),
+
+        0.0
     );
-    assert!(
+    assert_approx_eq!(
         (((Bra2::down() * Outer2::h2()) * Outer2::h2()) * Ket2::up())
-            .norm().powi(2) < E
+            .norm().powi(2),
+
+        0.0
     );
 }
 
@@ -81,7 +91,7 @@ fn bell_state() {
     // bell state (|00> + |11>)/2^-1/2 is 50% in computational basis
     let prob = (Bra4::from(q11) * state).norm().powi(2);
 
-    assert!(prob.abs() - 0.5 < E);
+    assert_approx_eq!(prob.abs(), 0.5);
 }
 
 #[test]
@@ -94,4 +104,21 @@ fn bell_cnot() {
     let bell_state2 = Outer4::cnot() * q1.cross(q2);
 
     assert_eq!(bell_state, bell_state2);
+}
+
+#[test]
+fn qft() {
+    let qft4 = Outer4::qft().into_matrix();
+
+    assert_approx_eq!(unsafe { qft4.get_unchecked((0, 0)).im }, 0.0);
+    assert_approx_eq!(unsafe { qft4.get_unchecked((0, 0)).re }, 0.5);
+
+    assert_approx_eq!(unsafe { qft4.get_unchecked((1, 1)).im }, 0.5);
+    assert_approx_eq!(unsafe { qft4.get_unchecked((1, 1)).re }, 0.0);
+
+    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 2)).im }, 0.0);
+    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 2)).re }, 0.5);
+
+    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 3)).im }, 0.0);
+    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 3)).re }, -0.5);
 }

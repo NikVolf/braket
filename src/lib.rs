@@ -6,6 +6,9 @@ extern crate num_complex;
 extern crate nalgebra;
 extern crate typenum;
 
+#[cfg(test)] extern crate assert_approx_eq;
+
+
 pub use num_complex::Complex64 as Complex;
 pub(crate) const SQRT_2_INVERSE: f64 = 0.707106781186547524400844362104849039284835937688474036588;
 

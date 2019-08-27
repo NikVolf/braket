@@ -1,5 +1,5 @@
 use std::ops::{Mul, Add};
-use nalgebra::{DefaultAllocator, MatrixMN, DimName, U2, U4, Matrix2, Matrix4};
+use nalgebra::{DefaultAllocator, MatrixMN, DimName, U2, U4, Matrix2, Matrix4, Matrix};
 use nalgebra::allocator::Allocator;
 
 use {Ket, Complex, SQRT_2_INVERSE};
@@ -72,6 +72,26 @@ impl<D: DimName> Outer<D>
                 0.0.into(), 0.0.into(), 1.0.into(), 0.0.into(),
             )
         )
+    }
+
+    pub fn qft() -> Outer<D> {
+        let mut matrix: MatrixMN<Complex, D, D> = Matrix::zeros_generic(D::name(), D::name());
+        let dim = D::name().value();
+
+        let n = dim as f64;
+
+        let coef = (Complex::from(1.0) / (n as f64)).sqrt();
+
+        for i in 0..dim {
+            for j in 0..dim {
+                let power = (Complex::from(2.0) * ::std::f64::consts::PI * Complex::i() / n)
+                    * (i as f64) * (j as f64);
+
+                unsafe { *matrix.get_unchecked_mut((i, j)) = power.exp() * coef; }
+            }
+        }
+
+        Outer(matrix)
     }
 }
 
