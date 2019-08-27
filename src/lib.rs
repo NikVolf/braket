@@ -10,7 +10,7 @@ extern crate typenum;
 
 
 pub use num_complex::Complex64 as Complex;
-pub(crate) const SQRT_2_INVERSE: f64 = 0.707106781186547524400844362104849039284835937688474036588;
+pub(crate) const SQRT_2_INVERSE: f64 = std::f64::consts::FRAC_1_SQRT_2;
 
 mod bra;
 mod ket;
