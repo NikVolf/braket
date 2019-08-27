@@ -74,6 +74,7 @@ impl<D: DimName> Outer<D>
         )
     }
 
+    /// Quantum Fourier Transform (QFT) matrix operator
     pub fn qft() -> Outer<D> {
         let mut matrix: MatrixMN<Complex, D, D> = Matrix::zeros_generic(D::name(), D::name());
         let dim = D::name().value();

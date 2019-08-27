@@ -110,6 +110,12 @@ fn bell_cnot() {
 fn qft() {
     let qft4 = Outer4::qft().into_matrix();
 
+    // QFT(4) matrix:
+    //  1   1   1   1
+    //  1   i  -1  -i
+    //  1  -1   1  -1
+    //  1  -i  -1   i
+
     assert_approx_eq!(unsafe { qft4.get_unchecked((0, 0)).im }, 0.0);
     assert_approx_eq!(unsafe { qft4.get_unchecked((0, 0)).re }, 0.5);
 
