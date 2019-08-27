@@ -20,8 +20,8 @@ fn prob() {
 #[test]
 fn outer() {
     let outer = (Ket2::up() * Bra2::down()).into_matrix();
-    assert_approx_eq!(unsafe { outer.get_unchecked((0, 0)).im }, 0.0);
-    assert_approx_eq!(unsafe { outer.get_unchecked((0, 1)).re }, 1.0);
+    assert_approx_eq!(outer[(0, 0)].im, 0.0);
+    assert_approx_eq!(outer[(0, 1)].re, 1.0);
 }
 
 #[test]
@@ -114,15 +114,15 @@ fn qft() {
     //  1  -1   1  -1
     //  1  -i  -1   i
 
-    assert_approx_eq!(unsafe { qft4.get_unchecked((0, 0)).im }, 0.0);
-    assert_approx_eq!(unsafe { qft4.get_unchecked((0, 0)).re }, 0.5);
+    assert_approx_eq!(qft4[(0, 0)].im, 0.0);
+    assert_approx_eq!(qft4[(0, 0)].re, 0.5);
 
-    assert_approx_eq!(unsafe { qft4.get_unchecked((1, 1)).im }, 0.5);
-    assert_approx_eq!(unsafe { qft4.get_unchecked((1, 1)).re }, 0.0);
+    assert_approx_eq!(qft4[(1, 1)].im, 0.5);
+    assert_approx_eq!(qft4[(1, 1)].re, 0.0);
 
-    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 2)).im }, 0.0);
-    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 2)).re }, 0.5);
+    assert_approx_eq!(qft4[(2, 2)].im, 0.0);
+    assert_approx_eq!(qft4[(2, 2)].re, 0.5);
 
-    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 3)).im }, 0.0);
-    assert_approx_eq!(unsafe { qft4.get_unchecked((2, 3)).re }, -0.5);
+    assert_approx_eq!(qft4[(2, 3)].im, 0.0);
+    assert_approx_eq!(qft4[(2, 3)].re, -0.5);
 }

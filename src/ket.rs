@@ -82,11 +82,9 @@ impl<D: DimName> Ket<D>
         let dim = D::name().value();
         for i in 0..dim {
             for j in 0..dim {
-                unsafe {
-                    *result.get_unchecked_mut(
-                        i*dim + j
-                    ) = self.0.get_unchecked(i) * other.0.get_unchecked(j);
-                }
+                *result.get_mut(
+                    i*dim + j
+                ).expect("i, j in (dim, dim) range") = self.0[i] * other.0[j];
             }
         }
         Ket(result)

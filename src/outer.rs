@@ -88,7 +88,7 @@ impl<D: DimName> Outer<D>
                 let power = (Complex::from(2.0) * ::std::f64::consts::PI * Complex::i() / n)
                     * (i as f64) * (j as f64);
 
-                unsafe { *matrix.get_unchecked_mut((i, j)) = power.exp() * coef; }
+                *matrix.get_mut((i, j)).expect("(i, j) in (dim, dim) range") = power.exp() * coef;
             }
         }
 
