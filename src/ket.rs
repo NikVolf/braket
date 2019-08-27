@@ -1,5 +1,5 @@
 use std::ops::{Mul, Add};
-use nalgebra::{DefaultAllocator, U1, VectorN, Vector2, DimName, U2, DimNameAdd, DimNameSum, Vector};
+use nalgebra::{DefaultAllocator, U1, VectorN, Vector2, DimName, U2, DimNameProd, DimNameMul, Vector};
 use nalgebra::allocator::Allocator;
 
 use {SQRT_2_INVERSE, Bra, Outer, Complex};
@@ -75,12 +75,12 @@ impl<D: DimName> Ket<D>
     /// Kronecker (tensor) product of two kets
     ///
     /// For qubits, it's possible to produce only 2 qubits state with this product.
-    pub fn cross(self, other: Ket<D>) -> Ket<DimNameSum<D, D>>
+    pub fn cross(self, other: Ket<D>) -> Ket<DimNameProd<D, D>>
         where
-            D: DimNameAdd<D>,
-            DefaultAllocator: Allocator<Complex, DimNameSum<D, D>>
+            D: DimNameMul<D>,
+            DefaultAllocator: Allocator<Complex, DimNameProd<D, D>>
     {
-        let mut result = Vector::zeros_generic(DimNameSum::<D, D>::name(), U1);
+        let mut result = Vector::zeros_generic(DimNameProd::<D, D>::name(), U1);
         let dim = D::name().value();
         for i in 0..dim {
             for j in 0..dim {
