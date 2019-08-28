@@ -1,7 +1,8 @@
 use assert_approx_eq::assert_approx_eq;
 
-use {Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex};
+use {Ket, Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex, U8};
 use ::{Outer4};
+use Ket4;
 
 #[test]
 fn orthogonal() {
@@ -126,4 +127,25 @@ fn qft() {
 
     assert_approx_eq!(qft4[(2, 3)].im, 0.0);
     assert_approx_eq!(qft4[(2, 3)].re, -0.5);
+}
+
+#[test]
+fn bits() {
+    let q11 = Ket2::up().cross(Ket2::up());
+    let q11_bits: Ket4 = Ket::from_bits(0b11).expect("11 are a valid ket4 bits");
+
+    assert_eq!(q11, q11_bits);
+
+    let q00 = Ket2::down().cross(Ket2::down());
+    let q00_bits: Ket4 = Ket::from_bits(0b00).expect("11 are a valid ket4 bits");
+
+    assert_eq!(q00, q00_bits);
+
+    let q111_bits: Ket<U8> = Ket::from_bits(0b111).expect("111 are valid ket8 bits");
+
+    assert_approx_eq!(q111_bits.0.get(0).expect("at least 8").re, 1.0);
+
+    for i in 1..8 {
+        assert_approx_eq!(q111_bits.0.get(i).expect("at least 8").re, 0.0);
+    }
 }

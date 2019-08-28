@@ -33,3 +33,5 @@ pub type Bra4 = Bra<nalgebra::U4>;
 pub type Ket4 = Ket<nalgebra::U4>;
 /// 4-dimension ket (for entangled states)
 pub type Outer4 = Outer<nalgebra::U4>;
+
+pub use nalgebra::{U8, U16, U32, U64};

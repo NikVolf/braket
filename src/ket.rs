@@ -91,6 +91,60 @@ impl<D: DimName> Ket<D>
         }
         Ket(result)
     }
+
+    /// Cross product of basis (|up> & |down>) qubits picked from a bit string.
+    pub fn from_bits(number: u16) -> Result<Ket<D>, &'static str>
+    {
+        fn get_bit_at(input: usize, n: usize) -> bool {
+            if n < 32 {
+                input & (1 << n) != 0
+            } else {
+                false
+            }
+        }
+
+        let size = D::name().value();
+
+        let value_bits: usize = 16 - number.leading_zeros() as usize;
+
+        if size < (1 << value_bits) {
+            return Err("Cannot fit number to the qubit state: not enough space");
+        }
+
+        if size & (size - 1) != 0 {
+            return Err("Should be a power of 2 to represent a tensor product");
+        }
+
+        let mut bit_space = Vec::new();
+        for i in 0..value_bits {
+            if get_bit_at(number as usize,i ) {
+                bit_space.push(Ket::<U2>::up());
+            } else {
+                bit_space.push(Ket::<U2>::down());
+            }
+        }
+
+        let mut result = Vector::zeros_generic(D::name(), U1);
+
+        let def0 = &Ket::down();
+
+        let size_log2 = 15 - (size as u16).leading_zeros() as usize;
+
+        for i in 0..size {
+            let mut ith = Complex::from(1.0);
+            for k in 0..size_log2 {
+                let kth = if k < bit_space.len() { &bit_space[k] } else { def0 };
+                ith = ith *
+                    {
+                        if get_bit_at(i, k) { kth.0.get(1).expect("always 2 elements") }
+                        else { kth.0.get(0).expect("always 2 elements") }
+                    }
+            }
+            *result.get_mut(i).expect("less than value_bits elements") = ith;
+        }
+
+        Ok(Ket(result))
+    }
 }
 
 impl<D: DimName> Mul<Bra<D>> for Ket<D>
