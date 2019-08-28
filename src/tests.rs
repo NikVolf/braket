@@ -1,8 +1,6 @@
 use assert_approx_eq::assert_approx_eq;
 
-use {Ket, Bra2, Bra4, Ket2, Outer2, SQRT_2_INVERSE, Complex, U8};
-use ::{Outer4};
-use Ket4;
+use {Ket, Bra2, Bra4, Ket2, Ket4, Outer2, Outer4, SQRT_2_INVERSE, Complex, U8};
 
 #[test]
 fn orthogonal() {
